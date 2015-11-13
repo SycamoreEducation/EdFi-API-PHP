@@ -1,0 +1,25 @@
+{
+    "name": "SycamoreEducation/EdFi-API-PHP",
+    "type": "library",
+    "description": "PHP EdFi API Wrapper",
+    "keywords": ["EdFi", "api", "EdFi api wrapper"],
+    "homepage": "https://github.com/SycamoreEducation/EdFi-API-PHP.git",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brock Ellis",
+            "email": "brock@sharproot.com",
+            "homepage": "http://thebrockellis.com"
+        },
+        {
+            "name": "Jeremiah Bohling",
+            "email": "allknowningfrog@gmail.com"
+        },
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": { "EdFi": "." }
+    }
+}
