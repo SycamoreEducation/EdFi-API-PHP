@@ -1,33 +1,35 @@
 <?php
 
-namespace Trello\Model;
+namespace EdFi\Model;
 
-class Board extends Object {
+class Students extends Object {
 
-    protected $_model = 'boards';
+    protected $_model = 'students';
+    
+    public function getStudents(array $params = array()){
 
-    public function getCards(array $params = array()){
-
-        $data = $this->getPath('cards', $params);
+        $data = $this->getAll($params);
 
         $tmp = array();
-        foreach ($data as $item){
-            array_push($tmp, new \Trello\Model\Card($this->getClient(), $item));
+        foreach ($data as $item){           
+            array_push($tmp, new \EdFi\Model\Students($this->getClient(), $item));
         }
 
         return $tmp;
 
     }
 
-    public function getCard($card_id, array $params = array()){
+    public function getStudent($id, array $params = array()){
 
-        $data = $this->getPath("cards/{$card_id}", $params);
+        $params['studentUniqueId'] = $id;
+    
+        $data = $this->getAll($params);
 
-        return new \Trello\Model\Card($this->getClient(), $data);
+        return new \EdFi\Model\Students($this->getClient(), $data);
 
     }
 
-    public function getActions(array $params = array()){
+    /*public function getActions(array $params = array()){
 
         $data = $this->getPath('actions', $params);
 
@@ -74,7 +76,7 @@ class Board extends Object {
         }
 
         return false;
-
     }
+*/
 
 }

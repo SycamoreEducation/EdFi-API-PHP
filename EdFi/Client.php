@@ -78,7 +78,7 @@ class Client {
 
         $codeData = $this->_makeRequest($oauthUrl, array(), 'GET');
         
-        print_r($codeData);
+        //print_r($codeData);
         
         if(!empty($codeData)){
         
@@ -111,7 +111,7 @@ class Client {
 
         $tokenData = $this->_makeRequest($oauthUrl, array(), 'GET');
         
-        print_r($tokenData);
+        //print_r($tokenData);
         
         if(!empty($tokenData)){
         
@@ -196,68 +196,6 @@ class Client {
     }
     
     /**
-     * Get a board
-     *
-     * @param string $id
-     *
-     * @return \Trello\Model\Board
-     */
-    public function getBoard($id){
-
-        $obj = new \Trello\Model\Board($this);
-        $obj->setId($id);
-
-        return $obj->get();
-
-    }
-
-    /**
-     * Get a card
-     *
-     * @param string $id
-     *
-     * @return \Trello\Model\Card
-     */
-    public function getCard($id){
-
-        $obj = new \Trello\Model\Card($this);
-        $obj->setId($id);
-
-        return $obj->get();
-
-    }
-
-    /**
-     * Get an action
-     *
-     * @param string $id
-     *
-     * @return \Trello\Model\Action
-     */
-    public function getAction($id){
-
-        $obj = new \Trello\Model\Action($this);
-        $obj->setId($id);
-
-        return $obj->get();
-
-    }
-
-    /**
-     *
-     * @param string $id
-     * @return \Trello\Model\Organization
-     */
-    public function getOrganization($id){
-
-        $obj = new \Trello\Model\Organization($this);
-        $obj->setId($id);
-
-        return $obj->get();
-
-    }
-
-    /**
      * Get the access token
      *
      * @return string
@@ -299,7 +237,7 @@ class Client {
      * @return array
      */
     public function get($path, array $payload = array()){
-        echo $path . '<BR><BR>';
+        //echo $path . '<BR><BR>';
         return $this->_makeRequest($path, $payload);
 
     }
@@ -363,13 +301,22 @@ class Client {
      */
     protected function _makeRequest($url, array $payload = array(), $method = 'GET', array $headers = array(), array $curl_options = array()){
 
-        echo $url . "<BR><BR>";
+        //echo $url . "<BR><BR>";
+        //echo "GetAccessToken " . $this->getAccessToken();
     
-        $url = $this->getApiBaseUrl() . '/' . $url;
+        //if this URL is not an oauth url used for authentication, 
+        if(strpos($url, "oauth") == false){
+            
+            $url = $this->getApiBaseUrl() . '/' . $url;
+                
+            //else if there is an access token loaded, append it to request
+            //$url .= '?access_token=' . $this->getAccessToken();
+            //echo "Adding access token to outgoing request";
+            $headers[] = 'Authorization: Bearer ' . $this->getAccessToken(); 
         
-        if ($this->getAccessToken()){
-            $url .= '?token=' . $this->getAccessToken();
         }
+        
+        //echo "$url <br><br>";
         
         $ch = $this->_getCurlHandle();
         $method = strtoupper($method);
@@ -386,14 +333,17 @@ class Client {
         if ($method === 'GET'){
 
             if (!empty($payload)){
-                $options[CURLOPT_URL] = $options[CURLOPT_URL] . '&' . http_build_query($payload, '&');
+                $options[CURLOPT_URL] = $options[CURLOPT_URL] . '?' . http_build_query($payload, '&');
             }
 
         }else if (!empty($payload)){
 
+            $payload = json_encode($payload);
+        
             $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = http_build_query($payload);
+            $options[CURLOPT_POSTFIELDS] = $payload;
             $headers[] = 'Content-Length: ' . strlen($options[CURLOPT_POSTFIELDS]);
+            $headers[] = 'Content-Type: application/json';
             $options[CURLOPT_HTTPHEADER] = $headers;
 
         }
@@ -402,7 +352,9 @@ class Client {
             $options = array_merge($options, $curl_options);
         }
 
-        print_r($options);
+        //print_r($headers);
+
+        //print_r($options);
         
         curl_setopt_array($ch, $options);
         $this->_raw_response = curl_exec($ch);
@@ -418,7 +370,7 @@ class Client {
 
         $response = json_decode($this->_raw_response, true);
 
-        if ($response === null || !is_array($response)){
+        if ( ($response === null || !is_array($response)) && $this->_debug_info['http_code'] != 200){
             throw new \RuntimeException('Could not decode response JSON - Response: ' . $this->_raw_response, $this->_debug_info['http_code']);
         }
 

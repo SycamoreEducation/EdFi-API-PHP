@@ -22,15 +22,21 @@ abstract class Object implements \ArrayAccess, \Countable, \Iterator{
      */
     public function save(){
 
+        echo $this->getId();
+    
         if ($this->getId()){
+            echo "<br><br> UPDATE <br><br>";
             return $this->update();
         }else{
-            $response = $this->getClient()->post($this->getModel() . '/' . $this->getId(), $this->toArray());
+            echo "<br><br> POST <br><br>";
+            //if you dont have an id, how can you USE IT IN THE URL?
+            //$response = $this->getClient()->post($this->getModel() . '/' . $this->getId(), $this->toArray());
+            $response = $this->getClient()->post($this->getModel(), $this->toArray());
         }
 
         $child = get_class($this);
 
-        return new $child($this->getClient(), $response);
+        return new $child($this->getClient(), $this->toArray());
 
     }
 
@@ -44,7 +50,7 @@ abstract class Object implements \ArrayAccess, \Countable, \Iterator{
 
         $child = get_class($this);
 
-        return new $child($this->getClient(), $response);
+        return new $child($this->getClient(), $this->toArray());
 
     }
 
@@ -56,9 +62,9 @@ abstract class Object implements \ArrayAccess, \Countable, \Iterator{
      */
     public function get(){
 
-        if (!$this->getId()){
+        /*if (!$this->getId()){
             throw new \InvalidArgumentException('There is no ID set for this object - Please call setId before calling get');
-        }
+        }*/
 
         $child = get_class($this);
         $response = $this->getClient()->get($this->getModel() . '/' . $this->getId());
@@ -116,7 +122,7 @@ abstract class Object implements \ArrayAccess, \Countable, \Iterator{
 
     public function getModel(){
 
-        echo $this->_model;
+        //echo $this->_model;
     
         return $this->_model;
 
