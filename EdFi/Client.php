@@ -6,6 +6,7 @@ class Client {
 
     private $_Client_id; //private $_api_key;
     private $_Client_secret; //private $_api_secret;
+    private $_School_id = "1100001001"; //MUST be loaded dynamically eventually
     private $_Response_type = "code"; 
     private $_access_token;
     private $_api_url = 'https://uawisedataapi.dpi.wi.gov/EdFiWebApi/api/v2.0/2015';
@@ -15,18 +16,9 @@ class Client {
     private $_curl_handle;
 
     const MODEL_STUDENTS = 'students';
-    const MODEL_SESSIONS = 'sessions';
     const MODEL_STUDENTSCHOOLASSOCIATIONS = 'studentSchoolAssociations';
-    /*const MODEL_CARDS = 'cards';
-    const MODEL_CHECKLISTS = 'checklists';
-    const MODEL_LISTS = 'lists';
-    const MODEL_MEMBERS = 'members';
-    const MODEL_NOTIFICATIONS = 'notifications';
-    const MODEL_ORGANIZATIONS = 'organizations';
-    const MODEL_SEARCH = 'search';
-    const MODEL_TOKEN = 'tokens';
-    const MODEL_TYPE = 'types';
-    const MODEL_WEBHOOKS = 'webhooks';*/
+    const MODEL_STUDENTSCHOOLASSOCIATIONSWISCONSINEXT = 'studentSchoolAssociationsWisconsinExt';
+    const MODEL_STUDENT_ACADEMIC_RECORD = 'studentAcademicRecord';
 
     /**
      * @param string $Client_id
@@ -143,6 +135,41 @@ class Client {
 
     }
 
+       
+    /**
+     * Get the access token
+     *
+     * @return string
+     */
+    public function getAccessToken(){
+
+        return $this->_access_token;
+
+    }
+    
+    /**
+     * Get the access token
+     *
+     * @return string
+     */
+    public function getSchoolId(){
+
+        return $this->_access_token;
+
+    }
+    
+    /**
+     * Get the access token
+     *
+     * @return string
+     */
+    public function setSchoolId($schoolId){
+
+        $this->_school_id = trim($schoolId);
+
+        return $this;
+    }
+    
     /**
      * Get the APIs base url
      *
@@ -194,18 +221,7 @@ class Client {
         return $this;
 
     }
-    
-    /**
-     * Get the access token
-     *
-     * @return string
-     */
-    public function getAccessToken(){
-
-        return $this->_access_token;
-
-    }
-
+ 
     /**
      * Get the Client Secret
      *

@@ -1,4 +1,6 @@
 <?php
+if($_GET['debug'] == true) $debug = TRUE;
+
 //configuration file that holds our credentials
 require_once("./config.php");
 
@@ -20,17 +22,21 @@ echo "<p>Find all students: ";
 echo '<pre>$students = new \EdFi\Model\Students($client);<br>';
 echo '$students = $students->getStudents();</pre></p>';
     
-//$students = new \EdFi\Model\Students($client);
-//$students = $students->getStudents();
+if(!$debug){    
+    $students = new \EdFi\Model\Students($client);
+    $students = $students->getStudents();
+}
 
 //////////////////////
 
 echo "<p>Find a student: ";
 echo '<pre>$student = new \EdFi\Model\Students($client);<br>';
 echo '$student = $student->setId("1001332768"); //studentUniqueId</pre></p>';
-    
-$student = new \EdFi\Model\Students($client);
-$student = $student->getStudent("1001332768"); 
+
+if(!$debug){    
+    $student = new \EdFi\Model\Students($client);
+    $student = $student->getStudent("1001332768"); //studentUniqueId
+}
 
 //////////////////////
 
@@ -70,8 +76,10 @@ echo '$studentData = array(
 echo '$student = new \EdFi\Model\Students($client, $studentData);<br>';
 echo '$student->save();</pre></p>';
 
-$student = new \EdFi\Model\Students($client, $studentData);
-$student->save();
+if(!$debug){    
+    $student = new \EdFi\Model\Students($client, $studentData);
+    $student->save();
+}
 
 /////////////////////
 
@@ -82,11 +90,13 @@ echo '$student->firstName = "Jim";<br>';
 echo '$student->save();';
 echo '</pre></p>';
 
-$students = new \EdFi\Model\Students($client);
-$student = $students->getStudent("1001332768"); 
+if(!$debug){    
+    $students = new \EdFi\Model\Students($client);
+    $student = $students->getStudent("1001332768"); //studentUniqueId
 
-$student->firstName = "Jim"; //update the property of that student
-$student->save(); //save will translate to update since the student is already created
+    $student->firstName = "Jim"; //update the property of that student
+    $student->save(); //save will translate to update since the student is already created
+}
 
 /////////////////////
 
@@ -96,21 +106,31 @@ echo '$student = $students->getStudent("1001332768"); //studentUniqueId <br>';
 echo '$student->delete();';
 echo '</pre></p>';
 
-$students = new \EdFi\Model\Students($client);
-$student = $students->getStudent("1001332768"); 
-$student->delete(); //not working yet, getting some odd error about dependencies
+if(!$debug){    
+    $students = new \EdFi\Model\Students($client);
+    $student = $students->getStudent("1001332768");  //studentUniqueId
+    $student->delete(); //not working yet, getting some odd error about dependencies
+}
 
 ///////////////////
 
-
-echo '<p>Create a student/school connection: <pre>';
-echo '$ssa = new \EdFi\Model\StudentSchoolAssociation($client);<br>';
-echo '$student = $students->getStudent("1001332768");<br>';
-echo '$student->firstName = "Jim";<br>';
-echo '$student->save();';
+echo '<p>Get all student/school associations: <pre>';
+echo '$ssa = new \EdFi\Model\StudentSchoolAssociations($client);<br>';
+echo '$associations = $ssa->getAssociations();<br>';
 echo '</pre></p>';
 
+$ssa = new \EdFi\Model\StudentSchoolAssociations($client);
+$associations = $ssa->getAssociations();
 
+///////////////////
+
+echo '<p>Get a specific student/school association: <pre>';
+echo '$ssa = new \EdFi\Model\StudentSchoolAssociations($client);<br>';
+echo '$associations = $ssa->getAssociations("1001332768", ");<br>';
+echo '</pre></p>';
+
+$ssa = new \EdFi\Model\StudentSchoolAssociations($client);
+$associations = $ssa->getAssociations();
 
 
 /*$studentSchoolAssociationData = array(

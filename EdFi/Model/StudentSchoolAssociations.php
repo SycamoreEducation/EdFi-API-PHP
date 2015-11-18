@@ -6,74 +6,31 @@ class StudentSchoolAssociations extends Object {
 
     protected $_model = 'studentSchoolAssociations';
 
-    public function getCards(array $params = array()){
+    public function getAssociations(){
 
-        $data = $this->getPath('cards', $params);
+        $data = $this->getAll();
 
         $tmp = array();
         foreach ($data as $item){
-            array_push($tmp, new \Trello\Model\Card($this->getClient(), $item));
+            //echo "<br><br>";
+            //print_r($item);
+            //echo "<br><br>";
+            array_push($tmp, new \EdFi\Model\StudentSchoolAssociations($this->getClient(), $item));
         }
 
         return $tmp;
 
     }
+    
+    public function getAssociation($studentUniqueId, $entryDate){
 
-    public function getCard($card_id, array $params = array()){
+        $params['studentUniqueId'] = $studentUniqueId;
+        $params['entryDate'] = $entryDate;
+        $params['schoolId'] = $this->getSchoolId();
+    
+        $data = $this->getAll($params);
 
-        $data = $this->getPath("cards/{$card_id}", $params);
-
-        return new \Trello\Model\Card($this->getClient(), $data);
-
-    }
-
-    public function getActions(array $params = array()){
-
-        $data = $this->getPath('actions', $params);
-
-        $tmp = array();
-        foreach ($data as $item){
-            array_push($tmp, new \Trello\Model\Action($this->getClient(), $item));
-        }
-
-        return $tmp;
-
-    }
-
-    public function getLists(array $params = array()){
-
-        $data = $this->getPath('lists', $params);
-
-        $tmp = array();
-        foreach ($data as $item){
-            array_push($tmp, new \Trello\Model\Lane($this->getClient(), $item));
-        }
-
-        return $tmp;
-
-    }
-
-    public function copy($new_name = null, array $copy_fields = array()){
-
-        if ($this->getId()){
-
-            $tmp = new self($this->getClient());
-            if (!$new_name){
-                $tmp->name = $this->name . ' Copy';
-            }else{
-                $tmp->name = $new_name;
-            }
-            $tmp->idBoardSource = $this->getId();
-
-            if (!empty($copy_fields)){
-                $tmp->keepFromSource = implode(',', $copy_fields);
-            }
-
-            return $tmp->save();
-
-        }
-
-        return false;
+        return new \EdFi\Model\StudentSchoolAssociations($this->getClient(), $data);
 
     }
 
