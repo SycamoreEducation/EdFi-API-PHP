@@ -22,13 +22,13 @@ abstract class Object implements \ArrayAccess, \Countable, \Iterator{
      */
     public function save(){
 
-        echo $this->getId();
+        //echo $this->getId();
     
         if ($this->getId()){
-            echo "<br><br> UPDATE <br><br>";
+            //echo "<br><br> UPDATE <br><br>";
             return $this->update();
         }else{
-            echo "<br><br> POST <br><br>";
+            //echo "<br><br> POST <br><br>";
             //if you dont have an id, how can you USE IT IN THE URL?
             //$response = $this->getClient()->post($this->getModel() . '/' . $this->getId(), $this->toArray());
             $response = $this->getClient()->post($this->getModel(), $this->toArray());

@@ -1,10 +1,10 @@
 <?php
 
-namespace Trello\Model;
+namespace EdFi\Model;
 
-class Board extends Object {
+class StudentSchoolAssociations extends Object {
 
-    protected $_model = 'boards';
+    protected $_model = 'studentSchoolAssociations';
 
     public function getCards(array $params = array()){
 

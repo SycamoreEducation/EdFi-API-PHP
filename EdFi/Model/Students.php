@@ -11,7 +11,10 @@ class Students extends Object {
         $data = $this->getAll($params);
 
         $tmp = array();
-        foreach ($data as $item){           
+        foreach ($data as $item){
+            //echo "<br><br>";
+            //print_r($item);
+            //echo "<br><br>";
             array_push($tmp, new \EdFi\Model\Students($this->getClient(), $item));
         }
 

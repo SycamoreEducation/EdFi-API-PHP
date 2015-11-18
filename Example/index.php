@@ -5,10 +5,16 @@ require_once("./config.php");
 //autoloader for EdFi-API-PHP that will load all our classes for us
 require_once("../autoloader.php");
 
+//////////////////////
+
+echo "<p>Authenticate: ";
+echo '<pre>$$client = new \EdFi\Client(CLIENT_ID, CLIENT_SECRET);</pre></p>';   
+
 $client = new \EdFi\Client(CLIENT_ID, CLIENT_SECRET);
 
 echo "<p>Token: " . $client->getAccessToken() . "</p>";
 
+//////////////////////
 
 echo "<p>Find all students: ";
 echo '<pre>$students = new \EdFi\Model\Students($client);<br>';
@@ -17,23 +23,23 @@ echo '$students = $students->getStudents();</pre></p>';
 //$students = new \EdFi\Model\Students($client);
 //$students = $students->getStudents();
 
+//////////////////////
+
 echo "<p>Find a student: ";
 echo '<pre>$student = new \EdFi\Model\Students($client);<br>';
-echo '$student->setId("1001332768");</pre></p>';
+echo '$student = $student->setId("1001332768");</pre></p>';
     
-//$student = new \EdFi\Model\Students($client);
-//$student->getStudent("1001332768");
+$student = new \EdFi\Model\Students($client);
+$student = $student->getStudent("1001332768");
 
-echo "<p>Create a connection between student and school: ";
-echo '<pre>$student = new \EdFi\Model\Students($client, $studentData);<br>';
-echo '$student->save();</pre></p>';
+//////////////////////
 
 $studentData = array(
     //"id" => "123456", //dont need this, its the GUID for the edfi stuff
     "studentUniqueId"=> "1001332768",
-    "firstName"=> "Brock",
-    "lastSurname"=> "Ellis",
-    "sexType"=> "Female",
+    "firstName"=> "Jim",
+    "lastSurname"=> "Halpert",
+    "sexType"=> "Male",
     "economicDisadvantaged"=> false,
     "schoolFoodServiceEligibilityDescriptor"=> "31a40355c512424b9e3d5e9ee8f02b62",
     "birthDate"=> "06-19-1988",
@@ -42,26 +48,54 @@ $studentData = array(
     "hispanicLatinoEthnicity"=> false,
     "races"=> [
         array("raceType" => "white"),
-        array("raceType" => "Black - African American")
     ]
 );
 
-//$student = new \EdFi\Model\Students($client, $studentData);
-//$student->save();
+echo "<p>Create a new student: <pre>";
+echo '$studentData = array(
+    "studentUniqueId"=> "1001332768",
+    "firstName"=> "Jim",
+    "lastSurname"=> "Halpert",
+    "sexType"=> "Male",
+    "economicDisadvantaged"=> false,
+    "schoolFoodServiceEligibilityDescriptor"=> "31a40355c512424b9e3d5e9ee8f02b62",
+    "birthDate"=> "06-19-1988",
+    "characteristics" => array("descriptor" => "SATA"),
+    "limitedEnglishProficiencyDescriptor" => "7",
+    "hispanicLatinoEthnicity"=> false,
+    "races"=> [
+        array("raceType" => "white"),
+    ]
+);<br>';
+echo '$student = new \EdFi\Model\Students($client, $studentData);<br>';
+echo '$student->save();</pre></p>';
 
+$student = new \EdFi\Model\Students($client, $studentData);
+$student->save();
+
+/////////////////////
+
+echo '<p>Update a students data: <pre>';
+echo '$students = new \EdFi\Model\Students($client);<br>';
+echo '$student = $students->getStudent("1001332768");<br>';
+echo '$student->firstName = "Jim";<br>';
+echo '$student->save();';
+echo '</pre></p>';
 
 $students = new \EdFi\Model\Students($client);
-$students = $students->getStudents();
+$student = $students->getStudent("1001332768"); //returns back an array of Student objects
 
-echo "<pre>" . print_r($students) . "</pre>";
+$student->firstName = "Jim"; //update the property of that student
+$student->save(); //save will translate to update since the student is already created
 
-$student = $students[0];
+/////////////////////
 
-//print_r($student);
-
-
-
-
+echo '<p>Create a student/school connection: <pre>';
+echo '$ssa = new \EdFi\Model\StudentSchoolAssociation($client);<br>';
+echo '$student = $students->getStudent("1001332768");<br>';
+echo '$student->firstName = "Jim";<br>';
+echo '$student->save();';
+echo '</pre></p>';
 
 
 
