@@ -360,9 +360,9 @@ class Client {
         $this->_raw_response = curl_exec($ch);
         $this->_debug_info = curl_getinfo($ch);
 
-        //echo "<br><br>";
-        //print_r($this->_raw_response);
-        //echo "<br><br>";
+        echo "<br><br>";
+        print_r($this->_raw_response);
+        echo "<br><br>";
         
         if ($this->_raw_response === false){
             throw new \RuntimeException('Request Error: ' . curl_error($ch));
@@ -374,9 +374,9 @@ class Client {
 
         $response = json_decode($this->_raw_response, true);
 
-        //echo "<br><br>";
-        //print_r($response);
-        //echo "<br><br>";
+        echo "<br><br>";
+        print_r($response);
+        echo "<br><br>";
         
         /*if ( ($response === null || !is_array($response)) && $this->_debug_info['http_code'] != 200){
             throw new \RuntimeException('Could not decode response JSON - Response: ' . $this->_raw_response, $this->_debug_info['http_code']);

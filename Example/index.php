@@ -27,10 +27,10 @@ echo '$students = $students->getStudents();</pre></p>';
 
 echo "<p>Find a student: ";
 echo '<pre>$student = new \EdFi\Model\Students($client);<br>';
-echo '$student = $student->setId("1001332768");</pre></p>';
+echo '$student = $student->setId("1001332768"); //studentUniqueId</pre></p>';
     
 $student = new \EdFi\Model\Students($client);
-$student = $student->getStudent("1001332768");
+$student = $student->getStudent("1001332768"); 
 
 //////////////////////
 
@@ -77,18 +77,31 @@ $student->save();
 
 echo '<p>Update a students data: <pre>';
 echo '$students = new \EdFi\Model\Students($client);<br>';
-echo '$student = $students->getStudent("1001332768");<br>';
+echo '$student = $students->getStudent("1001332768"); //studentUniqueId<br>';
 echo '$student->firstName = "Jim";<br>';
 echo '$student->save();';
 echo '</pre></p>';
 
 $students = new \EdFi\Model\Students($client);
-$student = $students->getStudent("1001332768"); //returns back an array of Student objects
+$student = $students->getStudent("1001332768"); 
 
 $student->firstName = "Jim"; //update the property of that student
 $student->save(); //save will translate to update since the student is already created
 
 /////////////////////
+
+echo '<p>Delete a student: <pre>';
+echo '$students = new \EdFi\Model\Students($client);<br>';
+echo '$student = $students->getStudent("1001332768"); //studentUniqueId <br>';
+echo '$student->delete();';
+echo '</pre></p>';
+
+$students = new \EdFi\Model\Students($client);
+$student = $students->getStudent("1001332768"); 
+$student->delete(); //not working yet, getting some odd error about dependencies
+
+///////////////////
+
 
 echo '<p>Create a student/school connection: <pre>';
 echo '$ssa = new \EdFi\Model\StudentSchoolAssociation($client);<br>';
